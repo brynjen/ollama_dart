@@ -46,17 +46,17 @@ class Ollama {
     List<int>? context,
   }) async {
     final urlString = '$host:$port/api/generate';
-    final result = await http.post(
+    final body = json.encode({
+      'prompt': prompt,
+      'model': model,
+      'stream': false,
+      'context': context,
+    });
+    final result = await client.post(
       Uri.parse(urlString),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'prompt': prompt,
-        'model': model,
-        'stream': false,
-        'context': context,
-      }),
+      body: body,
     );
-    //stdout.writeln('Body: ${result.body}');
     return Result.fromJson(jsonDecode(result.body));
   }
 
