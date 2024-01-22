@@ -1,7 +1,6 @@
 library ollama_dart;
 
 import 'dart:convert';
-import 'dart:io';
 import 'package:ollama_dart/domain/chunk.dart';
 import 'package:http/http.dart' as http;
 import 'package:ollama_dart/domain/create_status.dart';
