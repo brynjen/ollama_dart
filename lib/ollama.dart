@@ -1,6 +1,7 @@
 library ollama_dart;
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:ollama_dart/domain/chunk.dart';
 import 'package:http/http.dart' as http;
 import 'package:ollama_dart/domain/create_status.dart';
@@ -42,16 +43,30 @@ class Ollama {
   Future<Result> generateResult({
     required String prompt,
     required String model,
+    String? template,
     String? systemPrompt,
+    Map<String, dynamic>? options,
     List<int>? context,
   }) async {
     final urlString = '$host:$port/api/generate';
-    final body = json.encode({
+    final params = {
       'prompt': prompt,
       'model': model,
       'stream': false,
-      'context': context,
-    });
+    };
+    if (template != null) {
+      params['template'] = template;
+    }
+    if (systemPrompt != null) {
+      params['system'] = systemPrompt;
+    }
+    if (options != null) {
+      params['options'] = options;
+    }
+    if (context != null) {
+      params['context'] = context;
+    }
+    final body = json.encode(params);
     final result = await client.post(
       Uri.parse(urlString),
       headers: {'Content-Type': 'application/json'},
